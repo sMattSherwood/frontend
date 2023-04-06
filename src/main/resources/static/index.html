@@ -18,6 +18,8 @@
     <button id="putStudent">Put Student</button>
     <button id="deleteCourse">Delete Course</button>
     <button id="deleteStudent">Delete Student</button>
+    <input type="text" name="" id="courseId" value="2">
+    <h1 id="requestType"></h1>
     <table>
         <tr>
             <td>status</td>
@@ -30,6 +32,41 @@
     </table>
     <div id="divResponseBody"></div>
     <div id="divResponseStatus"></div>
+
+    <script>
+        var divResponseBody = document.getElementById("body")
+        var divResponseStatus = document.getElementById("status")
+        var requestType = document.getElementById("requestType")
+        var inputCourseId = document.getElementById("courseId")
+
+        window.onload = () => {
+            document.getElementById("getAllCourses").onclick = getCourse
+            document.getElementById("getCourseById").onclick = getCourseById
+            document.getElementById("getAllStudents").onclick = getAllStudents
+            document.getElementById("getStudentsById").onclick = getStudentsById
+            document.getElementById("getCoursesByStudent").onclick = getCourseByStudent
+            document.getElementById("postStudent").onclick = postStudent
+            document.getElementById("postCourse").onclick = postCourse
+            document.getElementById("putStudent").onclick = putStudent 
+            document.getElementById("deleteCourse").onclick = deleteCourse
+            document.getElementById("deleteStudent").onclick = deleteStudent
+
+        }
+
+        function getCourse() {
+            let url = "http://localhost:8080/api/Courses"
+            requestType.innerText = "GET " + url 
+            fetch(url)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                return response.json()
+            })
+            .then(json => {
+                divResponseBody.innerText = JSON.stringify(json)
+            })
+            .catch(error => alert(error))
+        }
+    </script>
     
     
 </body>
