@@ -18,8 +18,17 @@
     <button id="putStudent">Put Student</button>
     <button id="deleteCourse">Delete Course</button>
     <button id="deleteStudent">Delete Student</button>
-    <input type="text" name="" id="courseId" value="2">
+    <label>course value</label>
+    <input type="text" name="" id="courseId" value="1">
+    <label>student value</label>
+    <input type="text" id="studentId" value="1">
     <h1 id="requestType"></h1>
+    <label>student name</label>
+    <input type="text" id="studentName" value="jone doe">
+    <label>course name</label>
+    <input type="text" id="courseName" value="math">
+    <label>course decription</label>
+    <input type="text" id="courseDecription" value="This course is about math">
     <table>
         <tr>
             <td>status</td>
@@ -38,13 +47,17 @@
         var divResponseStatus = document.getElementById("status")
         var requestType = document.getElementById("requestType")
         var inputCourseId = document.getElementById("courseId")
+        var inputStudentId = document.getElementById("studentId")
+        var inputStudentName = document.getElementById("studentName")
+        var inputCourseName = document.getElementById("courseName")
+        var inputCourseDecription = document.getElementById("courseDecription")
 
         window.onload = () => {
             document.getElementById("getAllCourses").onclick = getCourse
             document.getElementById("getCourseById").onclick = getCourseById
             document.getElementById("getAllStudents").onclick = getAllStudents
             document.getElementById("getStudentsById").onclick = getStudentsById
-            document.getElementById("getCoursesByStudent").onclick = getCourseByStudent
+            document.getElementById("getCoursesByStudent").onclick = getCoursesByStudent
             document.getElementById("postStudent").onclick = postStudent
             document.getElementById("postCourse").onclick = postCourse
             document.getElementById("putStudent").onclick = putStudent 
@@ -55,7 +68,7 @@
 
         function getCourse() {
             let url = "http://localhost:8080/api/Courses"
-            requestType.innerText = "GET " + url 
+            requestType.innerText = "GET" + url 
             fetch(url)
             .then(response => {
                 divResponseStatus.innerText = response.status
@@ -64,6 +77,122 @@
             .then(json => {
                 divResponseBody.innerText = JSON.stringify(json)
             })
+            .catch(error => alert(error))
+        }
+        
+        function getCourseById() {
+            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value
+            requestType.innerText = "GET" + url
+
+            fetch(url)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                return response.json()
+            })
+            .then(json => {
+               
+                    divResponseBody.innerText = JSON.stringify(json)
+                
+               
+            })
+            .catch(error => alert(error))
+        }
+
+        function getAllStudents() {
+            let url = "http://localhost:8080/api/Students"
+            requestType.innerText = "GET" + url
+
+            fetch(url)
+            .then(response => {divResponseStatus.innerText = response.status
+                return response.json()
+            })
+            .then(json => {
+                divResponseBody.innerText = JSON.stringify(json)
+            })
+            .catch(error => alert(error))
+        }
+
+        function getStudentsById() {
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value 
+            requestType.innerText = "GET" + url
+
+            fetch(url)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                return response.json()
+            })
+            .then(json => {
+               
+                    divResponseBody.innerText = JSON.stringify(json)
+                
+               
+            })
+            .catch(error => alert(error))
+        }
+
+        function getCoursesByStudent() {
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value + "/Courses"
+            requestType.innerText = "GET" + url
+
+            fetch(url)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                if(response.status != 404)
+                {
+                    return response.json()
+                }
+            })
+            .then(json =>{
+                if(json)
+                {
+                    divResponseBody.innerText = JSON.stringify(json)
+                }
+                else
+                    divResponseBody.innerText = " "
+            })
+            .catch(error => alert(error))
+
+        }
+
+        function postCourse () {
+            let url = "http://localhost:8080/api/Courses/" + inputStudentId.value
+            requestType.innerText = "POST " + url
+            
+            let postInfo = {
+                method: "POST",
+                body: JSON.stringify({
+                    courseName: inputCourseName.value,
+                    courseDecription: inputCourseDecription.value
+                }),
+                headers: {'Content-type': 'application/json'}
+            }
+            fetch(url, postInfo)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                return response.text()
+            })
+            .then(text => divResponseBody.innerText = text)
+            .catch(error => alert(error))
+
+        }
+
+        function postStudent() {
+            let url = "http://localhost:8080/api/Students"
+            requestType.innerText = "POST " + url
+            
+            let postInfo = {
+                method: "POST",
+                body: JSON.stringify({
+                    studentName: inputStudentName.value,
+                }),
+                headers: {'Content-type': 'application/json'}
+            }
+            fetch(url, postInfo)
+            .then(response => {
+                divResponseStatus.innerText = response.status
+                return response.text()
+            })
+            .then(text => divResponseBody.innerText = text)
             .catch(error => alert(error))
         }
     </script>
