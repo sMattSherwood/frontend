@@ -195,6 +195,25 @@
             .then(text => divResponseBody.innerText = text)
             .catch(error => alert(error))
         }
+
+        function putStudent() {
+            let url = "http://localhost:8080/api/Students/" + inputCourseId.value 
+            requestType.innerText = "PUT " + url
+            let putInfo = {
+                method: "PUT",
+                body: JSON.stringify({
+                    studentName: inputStudentName.value
+                }),
+                headers: {'Content-type': 'application/json'}
+            }
+            fetch(url, putInfo)
+            .then(response =>{
+                divResponseStatus.innerText = response.status
+                divResponseBody.innerText = ""
+            })
+            .catch(error => alert(error))
+
+        }
     </script>
     
     
