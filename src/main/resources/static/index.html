@@ -33,7 +33,7 @@
             <input type="text" id="courseDecription" value="This course is about math">
         </li>
     </ul>
-    
+    <!--List of all the buttons for the Rest API-->
     <ul>
         <li><button id="getAllCourses">Get all Courses</button></li>
         <li> <button id="getCourseById">Get Course by Id</button> </li>
@@ -64,9 +64,11 @@
     <div id="divResponseStatus"></div>
 
     <script>
+    
         var divResponseBody = document.getElementById("body")
         var divResponseStatus = document.getElementById("status")
         var requestType = document.getElementById("requestType")
+    // input types 
         var inputCourseId = document.getElementById("courseId")
         var inputStudentId = document.getElementById("studentId")
         var inputStudentName = document.getElementById("studentName")
@@ -74,6 +76,7 @@
         var inputCourseDecription = document.getElementById("courseDecription")
 
         window.onload = () => {
+        // functions related to the press of the buttons 
             document.getElementById("getAllCourses").onclick = getCourse
             document.getElementById("getCourseById").onclick = getCourseById
             document.getElementById("getAllStudents").onclick = getAllStudents
@@ -86,7 +89,7 @@
             document.getElementById("deleteStudent").onclick = deleteStudent
 
         }
-
+    // this will get all courses 
         function getCourse() {
             let url = "http://localhost:8080/api/Courses"
             requestType.innerText = "GET" + url 
@@ -96,14 +99,14 @@
                 return response.json()
             })
             .then(json => {
-                divResponseBody.innerText = JSON.stringify(json)
+                divResponseBody.innerText = JSON.stringify(json) //outputs the json information
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if the request is invalid it will send an error
         }
-        
+    // get course by id 
         function getCourseById() {
-            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value
-            requestType.innerText = "GET" + url
+            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value // this is the inputed value by user
+            requestType.innerText = "GET" + url 
 
             fetch(url)
             .then(response => {
@@ -112,13 +115,13 @@
             })
             .then(json => {
                
-                    divResponseBody.innerText = JSON.stringify(json)
+                    divResponseBody.innerText = JSON.stringify(json) // outputs the data into json
                 
                
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if failed sends error message
         }
-
+    // get all students 
         function getAllStudents() {
             let url = "http://localhost:8080/api/Students"
             requestType.innerText = "GET" + url
@@ -128,13 +131,13 @@
                 return response.json()
             })
             .then(json => {
-                divResponseBody.innerText = JSON.stringify(json)
+                divResponseBody.innerText = JSON.stringify(json) // puts the json information into text
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if error send error message
         }
-
+    // get student by i
         function getStudentsById() {
-            let url = "http://localhost:8080/api/Students/" + inputStudentId.value 
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value // inputed id from the suer
             requestType.innerText = "GET" + url
 
             fetch(url)
@@ -144,26 +147,28 @@
             })
             .then(json => {
                
-                    divResponseBody.innerText = JSON.stringify(json)
+                    divResponseBody.innerText = JSON.stringify(json) // displays the data from json to text
                 
                
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if failed send error message
         }
-
+    // get courses by student
         function getCoursesByStudent() {
-            let url = "http://localhost:8080/api/Students/" + inputStudentId.value + "/Courses"
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value + "/Courses" // uses inputed student id value
             requestType.innerText = "GET" + url
 
             fetch(url)
             .then(response => {
                 divResponseStatus.innerText = response.status
+            // if not failed then return the json
                 if(response.status != 404)
                 {
                     return response.json()
                 }
             })
             .then(json =>{
+            // if data is json rather than nothing display json as text
                 if(json)
                 {
                     divResponseBody.innerText = JSON.stringify(json)
@@ -171,18 +176,19 @@
                 else
                     divResponseBody.innerText = " "
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // display error message 
 
         }
-
+    // post course
         function postCourse () {
-            let url = "http://localhost:8080/api/Courses/" + inputStudentId.value
+            let url = "http://localhost:8080/api/Courses/" + inputStudentId.value // inputed assoated studen id
             requestType.innerText = "POST " + url
             
             let postInfo = {
                 method: "POST",
                 body: JSON.stringify({
-                    courseName: inputCourseName.value,
+                // this will store the values inputed by user into the database
+                    courseName: inputCourseName.value, 
                     courseDecription: inputCourseDecription.value
                 }),
                 headers: {'Content-type': 'application/json'}
@@ -190,13 +196,13 @@
             fetch(url, postInfo)
             .then(response => {
                 divResponseStatus.innerText = response.status
-                return response.text()
+                return response.text() // this will return id of course
             })
             .then(text => divResponseBody.innerText = text)
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // send error if invalid
 
         }
-
+    // post student
         function postStudent() {
             let url = "http://localhost:8080/api/Students"
             requestType.innerText = "POST " + url
@@ -204,6 +210,7 @@
             let postInfo = {
                 method: "POST",
                 body: JSON.stringify({
+                // value inputed by user to be stored in database
                     studentName: inputStudentName.value,
                 }),
                 headers: {'Content-type': 'application/json'}
@@ -211,18 +218,19 @@
             fetch(url, postInfo)
             .then(response => {
                 divResponseStatus.innerText = response.status
-                return response.text()
+                return response.text() // return student id
             })
             .then(text => divResponseBody.innerText = text)
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if invalid dispalay error 
         }
-
+    // updates the student 
         function putStudent() {
-            let url = "http://localhost:8080/api/Students/" + inputCourseId.value 
+            let url = "http://localhost:8080/api/Students/" + inputCourseId.value // inputed id of student to change their name
             requestType.innerText = "PUT " + url
             let putInfo = {
                 method: "PUT",
                 body: JSON.stringify({
+                // updates the student name
                     studentName: inputStudentName.value
                 }),
                 headers: {'Content-type': 'application/json'}
@@ -232,11 +240,11 @@
                 divResponseStatus.innerText = response.status
                 divResponseBody.innerText = ""
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if invalid id send error
         }
 
         function deleteCourse() {
-            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value 
+            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value // id of Course to delete
             requestType.innerText = "DELETE " + url
             let deleteInfo = {
                 method: "DELETE",
@@ -246,7 +254,7 @@
             .then(response =>{
                 divResponseStatus.innerText = response.status
                 divResponseBody.innerText = ""
-                return response.json()
+                return response.json() 
             })
             .then(json => {
                 if(json){
@@ -255,11 +263,11 @@
                 else
                     divResponseBody.innerText = ""
             })
-            .catch(error => alert(error))
+            .catch(error => alert(error)) // if invalid send error alert
             
         }
         function deleteStudent() {
-            let url = "http://localhost:8080/api/Students/" + inputStudentId.value 
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value // inputed Student to delete
             requestType.innerText = "DELETE " + url
             let deleteInfo = {
                 method: "DELETE",
@@ -278,7 +286,7 @@
                 else
                     divResponseBody.innerText = ""
             })
-            .catch(error => alert("make sure you have deleted all courses"))
+            .catch(error => alert(error)) // display error is invalid
 
 }
     </script>
