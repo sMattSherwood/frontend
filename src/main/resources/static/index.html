@@ -7,28 +7,49 @@
     <title>Document</title>
 </head>
 <body>
-    <button id="getAllCourses">Get all Courses</button>
-    <button id="getCourseById">Get Course by Id</button>
-    <button id="getAllStudents">Get all Students</button>
-    <button id="getStudentsById">Get Students by Id</button>
-    <button id="getCoursesByStudent">Get all courses by student</button>
-    <button id="getAllCourses">2 get all courses</button>
-    <button id="postStudent">Post student</button>
-    <button id="postCourse">Post Course</button>
-    <button id="putStudent">Put Student</button>
-    <button id="deleteCourse">Delete Course</button>
-    <button id="deleteStudent">Delete Student</button>
-    <label>course value</label>
-    <input type="text" name="" id="courseId" value="1">
-    <label>student value</label>
-    <input type="text" id="studentId" value="1">
+    <ul>
+        <li>
+            <label>course value</label>
+            <input type="text" name="" id="courseId" value="1">
+        </li>
+        
+        <li>
+            <label>student value</label>
+            <input type="text" id="studentId" value="1">
+        </li>
+        
+        <li>
+            <label>student name</label>
+            <input type="text" id="studentName" value="jone doe">
+        </li>
+        
+        <li>
+            <label>course name</label>
+            <input type="text" id="courseName" value="math">
+        </li>
+        
+        <li>
+            <label>course decription</label>
+            <input type="text" id="courseDecription" value="This course is about math">
+        </li>
+    </ul>
+    
+    <ul>
+        <li><button id="getAllCourses">Get all Courses</button></li>
+        <li> <button id="getCourseById">Get Course by Id</button> </li>
+        <li><button id="getAllStudents">Get all Students</button> </li>
+        <li><button id="getStudentsById">Get Students by Id</button> </li>
+        <li><button id="getCoursesByStudent">Get all courses by student</button></li>
+        <li> <button id="getAllCourses">2 get all courses</button> </li>
+        <li><button id="postStudent">Post student</button></li>
+        <li> <button id="postCourse">Post Course</button> </li>
+        <li> <button id="putStudent">Put Student</button> </li>
+        <li><button id="deleteCourse">Delete Course</button></li>
+        <li> <button id="deleteStudent">Delete Student</button> </li>
+    </ul>
+
     <h1 id="requestType"></h1>
-    <label>student name</label>
-    <input type="text" id="studentName" value="jone doe">
-    <label>course name</label>
-    <input type="text" id="courseName" value="math">
-    <label>course decription</label>
-    <input type="text" id="courseDecription" value="This course is about math">
+   
     <table>
         <tr>
             <td>status</td>
@@ -212,8 +233,54 @@
                 divResponseBody.innerText = ""
             })
             .catch(error => alert(error))
-
         }
+
+        function deleteCourse() {
+            let url = "http://localhost:8080/api/Courses/" + inputCourseId.value 
+            requestType.innerText = "DELETE " + url
+            let deleteInfo = {
+                method: "DELETE",
+                headers: {'Content-type': 'application/json'}
+            }
+            fetch(url, deleteInfo)
+            .then(response =>{
+                divResponseStatus.innerText = response.status
+                divResponseBody.innerText = ""
+                return response.json()
+            })
+            .then(json => {
+                if(json){
+                    divResponseBody.innerText = JSON.stringify(json)
+                }
+                else
+                    divResponseBody.innerText = ""
+            })
+            .catch(error => alert(error))
+            
+        }
+        function deleteStudent() {
+            let url = "http://localhost:8080/api/Students/" + inputStudentId.value 
+            requestType.innerText = "DELETE " + url
+            let deleteInfo = {
+                method: "DELETE",
+                headers: {'Content-type': 'application/json'}
+            }
+            fetch(url, deleteInfo)
+            .then(response =>{
+                divResponseStatus.innerText = response.status
+                divResponseBody.innerText = ""
+                return response.json()
+            })
+            .then(json => {
+                if(json){
+                    divResponseBody.innerText = JSON.stringify(json)
+                }
+                else
+                    divResponseBody.innerText = ""
+            })
+            .catch(error => alert("make sure you have deleted all courses"))
+
+}
     </script>
     
     
